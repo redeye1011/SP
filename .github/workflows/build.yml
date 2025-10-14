@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          path: "src"
       
       - name: Setup JDK 17
         uses: actions/setup-java@v4
@@ -23,18 +21,58 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       
+      - name: Create local.properties
+        run: |
+          cat > local.properties << EOF
+          TMDB_API=your_api_key
+          CINEMATV_API=your_api_key
+          SFMOVIES_API=your_api_key
+          ZSHOW_API=your_api_key
+          DUMP_API=your_api_key
+          DUMP_KEY=your_api_key
+          CRUNCHYROLL_BASIC_TOKEN=your_token
+          CRUNCHYROLL_REFRESH_TOKEN=your_token
+          MOVIE_API=your_api_key
+          ANICHI_API=your_api_key
+          Whvx_API=your_api_key
+          CatflixAPI=your_api_key
+          ConsumetAPI=your_api_key
+          FlixHQAPI=your_api_key
+          WhvxAPI=your_api_key
+          WhvxT=your_token
+          SharmaflixApikey=your_api_key
+          SharmaflixApi=your_api_key
+          Theyallsayflix=your_api_key
+          GojoAPI=your_api_key
+          HianimeAPI=your_api_key
+          Vidsrccc=your_api_key
+          WASMAPI=your_api_key
+          KissKh=your_api_key
+          KisskhSub=your_api_key
+          SUPERSTREAM_THIRD_API=your_api_key
+          SUPERSTREAM_FOURTH_API=your_api_key
+          SUPERSTREAM_FIRST_API=your_api_key
+          StreamPlayAPI=your_api_key
+          PROXYAPI=your_api_key
+          KAISVA=your_api_key
+          MOVIEBOX_SECRET_KEY_ALT=your_key
+          MOVIEBOX_SECRET_KEY_DEFAULT=your_key
+          KAIDEC=your_key
+          EOF
+      
       - name: Build extensions
         run: |
-          cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           ./gradlew make makePluginsJson
-          cp **/build/*.cs3 $GITHUB_WORKSPACE/
-          cp build/plugins.json $GITHUB_WORKSPACE/
       
       - name: Push builds
         run: |
-          cd $GITHUB_WORKSPACE/
           git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git checkout -B builds
+          git add **/build/*.cs3 build/plugins.json
+          git commit -m "Build $GITHUB_SHA" || exit 0
+          git push -f origin builds          git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git checkout -B builds
           git add *.cs3 plugins.json
