@@ -21,12 +21,23 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Create settings.gradle.kts
+        run: |
+          cat > settings.gradle.kts << 'EOF'
+          rootProject.name = "StreamPlay"
+          
+          dependencyResolutionManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  maven("https://jitpack.io")
+              }
+          }
+          EOF
       
       - name: Create local.properties
         run: |
-          cat > local.properties << EOF
+          cat > local.properties << 'EOF'
           TMDB_API=
           CINEMATV_API=
           SFMOVIES_API=
@@ -35,6 +46,48 @@ jobs:
           DUMP_KEY=
           CRUNCHYROLL_BASIC_TOKEN=
           CRUNCHYROLL_REFRESH_TOKEN=
+          MOVIE_API=
+          ANICHI_API=
+          Whvx_API=
+          CatflixAPI=
+          ConsumetAPI=
+          FlixHQAPI=
+          WhvxAPI=
+          WhvxT=
+          SharmaflixApikey=
+          SharmaflixApi=
+          Theyallsayflix=
+          GojoAPI=
+          HianimeAPI=
+          Vidsrccc=
+          WASMAPI=
+          KissKh=
+          KisskhSub=
+          SUPERSTREAM_THIRD_API=
+          SUPERSTREAM_FOURTH_API=
+          SUPERSTREAM_FIRST_API=
+          StreamPlayAPI=
+          PROXYAPI=
+          KAISVA=
+          MOVIEBOX_SECRET_KEY_ALT=
+          MOVIEBOX_SECRET_KEY_DEFAULT=
+          KAIDEC=
+          EOF
+      
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      
+      - name: Build extensions
+        run: gradle make makePluginsJson --stacktrace
+      
+      - name: Push builds
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git checkout -B builds
+          git add **/build/*.cs3 build/plugins.json
+          git commit -m "Build $GITHUB_SHA" || exit 0
+          git push -f origin builds          CRUNCHYROLL_REFRESH_TOKEN=
           MOVIE_API=
           ANICHI_API=
           Whvx_API=
