@@ -21,20 +21,59 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      
       - name: Create local.properties
         run: |
           cat > local.properties << EOF
-          TMDB_API=your_api_key
-          CINEMATV_API=your_api_key
-          SFMOVIES_API=your_api_key
-          ZSHOW_API=your_api_key
-          DUMP_API=your_api_key
-          DUMP_KEY=your_api_key
-          CRUNCHYROLL_BASIC_TOKEN=your_token
-          CRUNCHYROLL_REFRESH_TOKEN=your_token
-          MOVIE_API=your_api_key
-          ANICHI_API=your_api_key
-          Whvx_API=your_api_key
+          TMDB_API=placeholder
+          CINEMATV_API=placeholder
+          SFMOVIES_API=placeholder
+          ZSHOW_API=placeholder
+          DUMP_API=placeholder
+          DUMP_KEY=placeholder
+          CRUNCHYROLL_BASIC_TOKEN=placeholder
+          CRUNCHYROLL_REFRESH_TOKEN=placeholder
+          MOVIE_API=placeholder
+          ANICHI_API=placeholder
+          Whvx_API=placeholder
+          CatflixAPI=placeholder
+          ConsumetAPI=placeholder
+          FlixHQAPI=placeholder
+          WhvxAPI=placeholder
+          WhvxT=placeholder
+          SharmaflixApikey=placeholder
+          SharmaflixApi=placeholder
+          Theyallsayflix=placeholder
+          GojoAPI=placeholder
+          HianimeAPI=placeholder
+          Vidsrccc=placeholder
+          WASMAPI=placeholder
+          KissKh=placeholder
+          KisskhSub=placeholder
+          SUPERSTREAM_THIRD_API=placeholder
+          SUPERSTREAM_FOURTH_API=placeholder
+          SUPERSTREAM_FIRST_API=placeholder
+          StreamPlayAPI=placeholder
+          PROXYAPI=placeholder
+          KAISVA=placeholder
+          MOVIEBOX_SECRET_KEY_ALT=placeholder
+          MOVIEBOX_SECRET_KEY_DEFAULT=placeholder
+          KAIDEC=placeholder
+          EOF
+      
+      - name: Build extensions
+        run: gradle make makePluginsJson
+      
+      - name: Push builds
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git checkout -B builds
+          git add **/build/*.cs3 build/plugins.json
+          git commit -m "Build $GITHUB_SHA" || exit 0
+          git push -f origin builds          Whvx_API=your_api_key
           CatflixAPI=your_api_key
           ConsumetAPI=your_api_key
           FlixHQAPI=your_api_key
